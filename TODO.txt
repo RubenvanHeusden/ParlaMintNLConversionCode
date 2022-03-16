@@ -1,0 +1,12 @@
+For the new version of ParlaMint, the committee meetings of the Dutch ParlaMint will be included in the scripts.
+This requires the following additions to the code, in order:
+
+Adjust the code according to specifications received from the tweedekamer team to retrieve committee meetings
+1.1 Check whether the results the code returns are equal to those of the officielebekendmakingen cite.
+1.2 Write tests for the conversion code
+Construct a new XSLT script that will convert committee meetings to TEI format.
+Unify mentions of PERS entities across the two corpora
+
+2. Check what kind of new information we need to add to persons and parties / structures
+3. Enhance the existing data wat subcategories
+4. Create an entity linker that can easily resolve entities within documents.
