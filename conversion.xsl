@@ -87,13 +87,13 @@
         let $kamer_id := tokenize($document_id, '-')[2]
         return if ($kamer_id='ek')
         then (if($current_date >= xs:date('2019-06-11')) then '36-upper' else ( if($current_date >= xs:date('2015-06-09')) then '35-upper' else '34-upper'))
-        else (if ($current_date >= xs:date('2017-10-27')) then '29-lower' else '28-lower')"/>
+        else (if ($current_date >= xs:date('2022-01-09')) then '30-lower' else ( if($current_date >= xs:date('2017-10-27')) then '29-lower' else '28-lower'))"/>
 
     <xsl:variable name = "chamber_ref_num" select="
         let $kamer_id := tokenize($document_id, '-')[2]
         return if ($kamer_id='ek')
         then (if($current_date >= xs:date('2019-06-11')) then '#EK.36' else ( if($current_date >= xs:date('2015-06-09')) then '#EK.35' else '#EK.34'))
-        else (if ($current_date >= xs:date('2017-10-27')) then '#TK.29' else '#TK.28')"/>
+        else (if ($current_date >= xs:date('2022-01-09')) then '#TK.30' else ( if($current_date >= xs:date('2017-10-27')) then '#TK.29' else '#TK.28'))"/>
 
     <xsl:variable name="id" select="
         'ParlaMint-NL_' ||  $current_date ||'-' || lower-case(replace($kamer_type, ' ', '')) || '-' ||$metadata_file/metadata_gegevens/metadata[@name='OVERHEIDop.handelingenItemNummer']/@content  "/>
@@ -122,7 +122,7 @@
                     - The funder of the research
                 -->
                 <titleStmt>
-                    <title type="main" xml:lang="en">Dutch Parliamentary Corpus ParlaMint-NL, <xsl:value-of select="$english_chamber_text || ' '"/> <xsl:value-of select="$current_date" /> [ParlaMint]</title>
+                    <title type="main" xml:lang="en">Dutch parliamentary corpus ParlaMint-NL, <xsl:value-of select="$english_chamber_text || ' '"/> <xsl:value-of select="$current_date" /> [ParlaMint]</title>
                     <title type="main" xml:lang="nl">Corpus van het Nederlandse Parlement ParlaMint-NL, <xsl:value-of select="$kamer_type || ' '"/> <xsl:value-of select="$current_date" /> [ParlaMint]</title>
 
                     <title type="sub" xml:lang="en">Report of the meeting of the Dutch <xsl:value-of select="$english_chamber_text"/>, Meeting <xsl:value-of select="$metadata_file/metadata_gegevens/metadata[@name='OVERHEIDop.publicationIssue']/@content"/>, Session <xsl:value-of select="officiele-publicatie/handelingen/agendapunt/nr/text() || ' '" /> <xsl:value-of select="'(' || $current_date || ')'"/> </title>
@@ -428,7 +428,7 @@
     <xsl:template match="officiele-publicatie//onderwerp" />
 
     <xsl:template match="officiele-publicatie//handeling_bijlage[@soort = 'stukkenlijst']">
-        <note> Some filler text until I figure out what to put here</note>
+        <note> Lijst van Stukken Bijlagen</note>
 
     </xsl:template>
 
