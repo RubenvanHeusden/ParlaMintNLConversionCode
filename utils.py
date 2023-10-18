@@ -45,9 +45,18 @@ def look_up_name(name_string):
     return name, positions, href
 
 
-def ground_actors(source_dir):
+def ground_actors(source_dir, existing_speaker_file: str):
     namespaces = {'ns': 'http://www.tei-c.org/ns/1.0'}
     actor_dict = {}
+    existing_records = et.parse(existing_speaker_file)
+    existing_actors = existing_records.xpath('.//ns:person', namespaces=namespaces)
+    ids = [actor.attrib['{http://www.w3.org/XML/1998/namespace}id'] for actor in existing_actors]
+    names = [actor.xpath('.//ns:surname', namespaces=namespaces)[0].text.lower().replace(' ', '') for actor in existing_actors]
+    parties = [actor.xpath('.//ns:affiliation', namespaces=namespaces)[0].attrib['ref'].replace('#party.', '').lower() if actor.xpath('.//ns:affiliation', namespaces=namespaces) else '' for actor in existing_actors]
+    lookup_names = list(zip(names, parties))
+    # Now we make a dict that we can compare with the names that we have
+    records_dict = {ids[i]: "".join(lookup_names[i]) for i in range(len(ids))}
+    records_dict = {val: key for key, val in records_dict.items()}
     files = os.listdir(source_dir)
     for file in tqdm(files):
         if '.DS_Store' not in file:
@@ -62,6 +71,7 @@ def ground_actors(source_dir):
 
     # now we can do our lookup
     for name in actor_dict.keys():
+
         grounded_name, functions, link = look_up_name((clean_name(name)))
         if grounded_name:
             id_name = "".join(list(reversed(grounded_name.split(',')))).replace(' ', '').replace('.', '').replace('-', '')
@@ -86,7 +96,14 @@ def ground_actors(source_dir):
             # set all actors in a dict so that this is unique and we can use that
             # we can 'bind' the found results to the actor names
             for actor in actors:
-                if not actor_dict[actor.attrib['who']].get('grounded_name') and (
+                name = actor.attrib['who']
+                party = name.split('_')[-1].lower() if name.split('_')[-1] != '' else ''
+                cleaned_name = "".join(" ".join(name.split()[1:]).split('_')[:-1]).lower().replace(' ', '')
+                match_name = cleaned_name.lower() + party.lower()
+                if records_dict.get(match_name, None):
+                    actor.attrib['who'] = '#' + records_dict[match_name]
+                    continue
+                elif not actor_dict[actor.attrib['who']].get('grounded_name') and (
                         actor_dict[actor.attrib['who']]['party'] is None):
                     actor.attrib['ana'] = '#guest'
                 else:
@@ -94,7 +111,7 @@ def ground_actors(source_dir):
                     if old_ana != '#chair':
                         actor.attrib['ana'] = '#regular'
 
-                actor.attrib['who'] = '#'+actor_dict[actor.attrib['who']]['id_name']
+                actor.attrib['who'] = '#' + actor_dict[actor.attrib['who']]['id_name']
 
             xml_file.write(os.path.join(source_dir, file), pretty_print=True)
 

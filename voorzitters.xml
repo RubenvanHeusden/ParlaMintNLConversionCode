@@ -2,11 +2,11 @@
 <voorzitters-informatie>
 	<eerste-kamer>
 		<voorzitter name="Ankie Broekers-Knol" gender="female" start="2013-07-02" end="2019-06-11" />
-		<voorzitter name="Jan Anthonie Bruijn" gender="male" start = "2019-06-12" end="2023-01-01" />
+		<voorzitter name="Jan Anthonie Bruijn" gender="male" start = "2019-06-12" end="2024-01-01" />
 	</eerste-kamer>
 	<tweede-kamer>
 		<voorzitter name="Anouchka van Miltenburg" gender="female" start = "2012-09-25" end="2015-12-12" />
 		<voorzitter name="Khadija Arib" gender="female" start = "2015-12-13" end="2021-04-06" />
-		<voorzitter name="Vera Bergkamp" gender="female" start = "2021-04-07" end="2023-01-01" />
+		<voorzitter name="Vera Bergkamp" gender="female" start = "2021-04-07" end="2024-01-01" />
 	</tweede-kamer>
 </voorzitters-informatie>
